@@ -1,0 +1,52 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.3.0'
+	id 'io.spring.dependency-management' version '1.1.7'
+    id("io.freefair.lombok") version "9.2.0"
+}
+
+group = 'com.dio'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+    // Repositório necessário para buscar versões Milestone (M1, M2, etc.) do Spring AI
+    maven { url = 'https://spring.io' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    // Uso do ElevenLabs para TTS
+    implementation 'org.springframework.ai:spring-ai-starter-model-elevenlabs'
+    implementation 'org.springframework.ai:spring-ai-elevenlabs'
+
+    // Gerenciador de versões automático para o Spring AI
+    implementation platform('org.springframework.ai:spring-ai-bom:1.1.5')
+
+    // Qual versão do starter o gradle busca
+    implementation 'org.springframework.ai:spring-ai-starter-model-google-genai'
+
+    developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+
+    // Força a exibição do System.out e System.err no terminal
+    testLogging {
+        showStandardStreams = true
+    }
+}
